@@ -56,14 +56,15 @@ const CollisionHandler = ({
       });
     }
 
-    // Check if player reached the end
-    const endZone = { x: 740, y: 20, width: 40, height: 40 };
-    if (
-      position.x > endZone.x &&
-      position.x < endZone.x + endZone.width &&
-      position.y > endZone.y &&
-      position.y < endZone.y + endZone.height
-    ) {
+    // Check if player reached the end zone
+    const endZone = { x: 700, y: 0, width: 80, height: 80 };
+    const playerInEndZone = 
+      position.x >= endZone.x && 
+      position.x <= endZone.x + endZone.width && 
+      position.y >= endZone.y && 
+      position.y <= endZone.y + endZone.height;
+
+    if (playerInEndZone) {
       const levelPoints = level * 100;
       const bonusPoints = 50;
       const totalPoints = levelPoints + bonusPoints;

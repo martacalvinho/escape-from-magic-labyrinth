@@ -75,7 +75,7 @@ const GameBoard = ({ level, onScoreChange, onLivesChange, onLevelComplete }: Gam
       </div>
 
       {/* End zone */}
-      <div className="absolute top-5 right-5 w-10 h-10 bg-yellow-500/30 rounded flex items-center justify-center text-yellow-200 text-sm">
+      <div className="absolute top-0 right-0 w-20 h-20 bg-yellow-500/30 rounded flex items-center justify-center text-yellow-200 text-sm">
         Exit
       </div>
 

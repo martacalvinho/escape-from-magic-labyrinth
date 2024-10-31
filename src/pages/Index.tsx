@@ -30,6 +30,10 @@ const Index = () => {
     });
   };
 
+  const handleLevelComplete = () => {
+    setCurrentLevel((prevLevel) => prevLevel + 1);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-900 to-indigo-900 text-white p-4">
       <div className="max-w-4xl mx-auto">
@@ -51,6 +55,7 @@ const Index = () => {
           level={currentLevel}
           onScoreChange={setScore}
           onLivesChange={setLives}
+          onLevelComplete={handleLevelComplete}
         />
 
         <div className="mt-8 text-center">

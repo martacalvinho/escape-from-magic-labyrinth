@@ -3,8 +3,8 @@ import { useToast } from "@/components/ui/use-toast";
 
 interface GameBoardProps {
   level: number;
-  onScoreChange: (score: number) => void;
-  onLivesChange: (lives: number) => void;
+  onScoreChange: (newScore: number) => void;
+  onLivesChange: (newLives: number) => void;
 }
 
 interface Obstacle {
@@ -18,6 +18,7 @@ interface Obstacle {
 const GameBoard = ({ level, onScoreChange, onLivesChange }: GameBoardProps) => {
   const [position, setPosition] = useState({ x: 40, y: 360 });
   const [obstacles, setObstacles] = useState<Obstacle[]>([]);
+  const [currentScore, setCurrentScore] = useState(0);
   const { toast } = useToast();
 
   // Initialize obstacles based on level
@@ -29,6 +30,8 @@ const GameBoard = ({ level, onScoreChange, onLivesChange }: GameBoardProps) => {
         { id: 3, x: 300, y: 150, direction: "horizontal", forward: false },
         { id: 4, x: 500, y: 200, direction: "vertical", forward: true },
         { id: 5, x: 150, y: 300, direction: "horizontal", forward: true },
+        { id: 6, x: 350, y: 100, direction: "vertical", forward: false },
+        { id: 7, x: 250, y: 200, direction: "horizontal", forward: true },
       ]);
     } else if (level === 2) {
       setObstacles([
@@ -39,6 +42,8 @@ const GameBoard = ({ level, onScoreChange, onLivesChange }: GameBoardProps) => {
         { id: 5, x: 100, y: 280, direction: "horizontal", forward: true },
         { id: 6, x: 600, y: 150, direction: "vertical", forward: false },
         { id: 7, x: 200, y: 350, direction: "horizontal", forward: true },
+        { id: 8, x: 300, y: 50, direction: "vertical", forward: true },
+        { id: 9, x: 550, y: 300, direction: "horizontal", forward: false },
       ]);
     }
     // Reset position when level changes
@@ -103,7 +108,8 @@ const GameBoard = ({ level, onScoreChange, onLivesChange }: GameBoardProps) => {
 
     if (collision) {
       setPosition({ x: 40, y: 360 });
-      onLivesChange(lives => Math.max(0, lives - 1));
+      const newLives = Math.max(0, currentScore - 1);
+      onLivesChange(newLives);
       toast({
         title: "Ouch!",
         description: "You hit an obstacle! Try again.",
@@ -119,16 +125,23 @@ const GameBoard = ({ level, onScoreChange, onLivesChange }: GameBoardProps) => {
       position.y > endZone.y &&
       position.y < endZone.y + endZone.height
     ) {
-      const points = level * 100;
-      onScoreChange(score => score + points);
+      const levelPoints = level * 100;
+      const bonusPoints = 50; // Base points for clearing level
+      const totalPoints = levelPoints + bonusPoints;
+      
+      const newScore = currentScore + totalPoints;
+      setCurrentScore(newScore);
+      onScoreChange(newScore);
+      
       toast({
-        title: "Level Complete!",
-        description: `Level ${level} completed! +${points} points`,
+        title: "Level Complete! 🎉",
+        description: `Level ${level} completed! +${totalPoints} points (${levelPoints} level + ${bonusPoints} bonus)`,
       });
+      
       // Reset position for next level
       setPosition({ x: 40, y: 360 });
     }
-  }, [position, obstacles, onLivesChange, onScoreChange, toast, level]);
+  }, [position, obstacles, onLivesChange, onScoreChange, toast, level, currentScore]);
 
   const handleKeyPress = useCallback(
     (event: KeyboardEvent) => {

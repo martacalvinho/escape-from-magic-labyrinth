@@ -50,7 +50,7 @@ const GameBoard = ({ level, onScoreChange, onLivesChange, onLevelComplete }: Gam
 
   const handleCollision = () => {
     setPosition({ x: 40, y: 360 });
-    onLivesChange((prev: number) => Math.max(0, prev - 1));
+    onLivesChange(Math.max(0, lives - 1));
   };
 
   return (

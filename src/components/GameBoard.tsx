@@ -50,12 +50,13 @@ const GameBoard = ({ level, onScoreChange, onLivesChange, onLevelComplete }: Gam
 
   const handleCollision = () => {
     setPosition({ x: 40, y: 360 });
-    const newLives = Math.max(0, currentScore - 1);
-    onLivesChange(newLives);
+    onLivesChange((prev: number) => Math.max(0, prev - 1));
   };
 
   return (
-    <div className="relative w-full h-[400px] bg-purple-950/50 rounded-lg border-2 border-purple-500 overflow-hidden">
+    <div className={`relative w-full h-[400px] rounded-lg border-2 border-purple-500 overflow-hidden ${
+      level === 2 ? 'bg-gray-900/50' : 'bg-purple-950/50'
+    }`}>
       <CollisionHandler
         position={position}
         obstacles={obstacles}
@@ -91,7 +92,9 @@ const GameBoard = ({ level, onScoreChange, onLivesChange, onLevelComplete }: Gam
       {obstacles.map((obstacle) => (
         <div
           key={obstacle.id}
-          className="absolute w-10 h-10 bg-purple-700 rounded transition-all duration-50"
+          className={`absolute w-10 h-10 rounded transition-all duration-50 ${
+            level === 2 ? 'bg-gray-700 rotate-45' : 'bg-purple-700'
+          }`}
           style={{ left: obstacle.x, top: obstacle.y }}
         />
       ))}
